@@ -1,0 +1,33 @@
+version: "3"
+services:
+  bot:
+    build: ./to-do-bot
+    container_name: to-do-bot
+    networks:
+      - my_network
+    volumes:
+      - ./to-do-bot:/to-do-bot
+  backend:
+    build: ./to-do-backend
+    container_name: to-do-backend
+    networks:
+      - my_network
+    volumes:
+      - ./to-do-backend:/code
+    ports:
+      - "80:80"
+  database:
+    image: "postgres"
+    container_name: pg
+    networks:
+      - my_network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+
+networks:
+  my_network:
+    driver : bridge
